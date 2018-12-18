@@ -8,5 +8,13 @@
 </ion-header>
 
 <ion-content padding>
-  <p>Categorias</p>
+  <ion-list>
+    <button ion-item *ngFor="let item of items">
+      <ion-avatar item-start>
+        <img src="{{bucketUrl}}/cat{{item.id}}.png">
+      </ion-avatar>
+      <h2>{{item.nome}}</h2>
+      <p>{{item.valorDiario}}</p>
+    </button>
+  </ion-list>
 </ion-content>
