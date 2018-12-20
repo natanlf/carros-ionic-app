@@ -42,4 +42,8 @@ export class AuthService {
                 responseType: 'text' //uso text pois não tenho corpo só header, assim não terei erro de parse json
             });
     }
+
+    logout(){
+        this.storage.setLocalUser(null)
+    }
 }
