@@ -2,11 +2,14 @@ import { StorageService } from './../services/storage.service';
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx'; // IMPORTANTE: IMPORT ATUALIZADO
+import { AlertController } from 'ionic-angular/components/alert/alert-controller';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
 
-    constructor(private storage: StorageService){}
+    constructor(
+        private storage: StorageService, 
+        public alertCtrl: AlertController){}
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
        console.log("Passou no interceptor");
@@ -23,18 +26,57 @@ export class ErrorInterceptor implements HttpInterceptor {
            console.log(errorObj);
 
            switch(errorObj.status){
+               case 401:
+               this.handle401();
+               break;
+
                case 403: 
                this.handle403();
                break;
+
+               default: 
+                this.handleDefaultError(errorObj);
            }
 
             return Observable.throw(errorObj);
        }) as any;
    }
 
+   handle401(){ 
+    //criando um objeto alert
+        let alert = this.alertCtrl.create({
+        title: "Erro 401: falha na autenticação",
+        message: "Email ou senha incorretos",
+        enableBackdropDismiss: false, //para sair do alert deve clicar no botão do mesmo
+        buttons:[
+            {
+                text: "OK"
+            }
+        ]
+
+    });
+    alert.present(); //apresenta o alert
+}
+
     handle403(){ //se der erro 403 vou limpar o token e email do LocalStorage
         this.storage.setLocalUser(null);
     }
+
+    handleDefaultError(errorObj){
+        //criando um objeto alert
+        let alert = this.alertCtrl.create({
+           title: "Erro :"+errorObj.status+": " +errorObj.error,
+           message: errorObj.message,
+           enableBackdropDismiss: false, //para sair do alert deve clicar no botão do mesmo
+           buttons:[
+               {
+                   text: "OK"
+               }
+           ]
+
+       });
+       alert.present(); //apresenta o alert
+   }
 }
 
 export const ErrorInterceptorProvider = {
