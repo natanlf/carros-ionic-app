@@ -39,4 +39,13 @@ export class HomePage {
     
   }
 
+  ionViewDidEnter() {
+    this.authService.refreshToken()
+      .subscribe(response => {
+        this.authService.successfulLogin(response.headers.get('Authorization'));
+        this.navCtrl.setRoot('CategoriasPage');
+      },
+      error => {});  
+  }
+
 }

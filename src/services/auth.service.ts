@@ -31,4 +31,15 @@ export class AuthService {
         }
         this.storage.setLocalUser(user)
     }
+
+    //Quando o usuário vai abrir o app, não vai precisar logar novamente caso o token ainda esteja válido
+    refreshToken() {
+        return this.http.post(
+            `${API_CONFIG.baseUrl}/auth/refresh_token`, 
+            {},
+            {
+                observe: 'response',
+                responseType: 'text' //uso text pois não tenho corpo só header, assim não terei erro de parse json
+            });
+    }
 }
