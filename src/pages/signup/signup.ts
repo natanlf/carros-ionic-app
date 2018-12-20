@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ClienteService } from '../../services/domain/cliente.service';
 
 /**
  * Generated class for the SignupPage page.
@@ -21,7 +22,9 @@ export class SignupPage {
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
-    public formBuilder: FormBuilder) {
+    public formBuilder: FormBuilder,
+    public clienteService: ClienteService,
+    public alertCtrl: AlertController) {
 
       this.formGroup = this.formBuilder.group(
         {
@@ -41,6 +44,28 @@ export class SignupPage {
   }
 
   signupUser() {
-    console.log("enviou o form");
+    this.clienteService.insert(this.formGroup.value)
+    .subscribe(
+      respone => {
+        this.showInsertOK()
+      }, error=>{}
+    )
+  }
+
+  showInsertOK(){
+    let alert = this.alertCtrl.create({
+      title: "Sucesso!",
+      message: "Cadastro efetuado com sucesso",
+      enableBackdropDismiss: false,
+      buttons:[
+        {
+          text: "OK",
+          handler: () => {
+            this.navCtrl.pop(); //desempilhar essa página
+          }
+        }
+      ] 
+    });
+    alert.present(); //apresenta o alert na tela
   }
 }

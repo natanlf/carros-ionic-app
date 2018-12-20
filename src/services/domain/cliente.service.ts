@@ -26,4 +26,13 @@ export class ClienteService {
         let url = `${API_CONFIG.bucketBaseUrl}/cp${id}.jpg`
         return this.http.get(url, {responseType : 'blob'}); //blob diz que a resposta é imagem
     }
+
+    insert(obj: ClienteDTO){
+        return this.http.post(`${API_CONFIG.baseUrl}/clientes`,
+        obj,
+        {
+            observe: 'response', 
+            responseType: 'text' //corpo vazio por isso texto para não dá erro de parse json
+        })
+    }
 }

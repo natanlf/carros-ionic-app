@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx'; // IMPORTANTE: IMPORT ATUALIZADO
 import { AlertController } from 'ionic-angular/components/alert/alert-controller';
+import { FieldMessage } from '../models/fieldmessage';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -34,6 +35,10 @@ export class ErrorInterceptor implements HttpInterceptor {
                this.handle403();
                break;
 
+               case 422:
+                this.handle422(errorObj);
+                break;
+
                default: 
                 this.handleDefaultError(errorObj);
            }
@@ -62,6 +67,20 @@ export class ErrorInterceptor implements HttpInterceptor {
         this.storage.setLocalUser(null);
     }
 
+    handle422(errorObj){
+        let alert = this.alertCtrl.create({
+            title: "Erro 422: Validação",
+            message: this.listErrors(errorObj.errors),
+            enableBackdropDismiss: false, //para sair do alert deve clicar no botão do mesmo
+            buttons:[
+                {
+                    text: "OK"
+                }
+            ]
+        });
+        alert.present();
+    }
+
     handleDefaultError(errorObj){
         //criando um objeto alert
         let alert = this.alertCtrl.create({
@@ -77,6 +96,14 @@ export class ErrorInterceptor implements HttpInterceptor {
        });
        alert.present(); //apresenta o alert
    }
+
+   private listErrors(messages : FieldMessage[]) : string {
+    let s : string = '';
+    for (var i=0; i<messages.length; i++) {
+        s = s + '<p><strong>' + messages[i].fieldName + "</strong>: " + messages[i].message + '</p>';
+    }
+    return s;
+}
 }
 
 export const ErrorInterceptorProvider = {
