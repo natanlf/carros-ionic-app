@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ClienteService } from '../../services/domain/cliente.service';
+import { MenuController } from '../../../node_modules/ionic-angular/components/app/menu-controller';
 
 /**
  * Generated class for the SignupPage page.
@@ -24,7 +25,8 @@ export class SignupPage {
     public navParams: NavParams,
     public formBuilder: FormBuilder,
     public clienteService: ClienteService,
-    public alertCtrl: AlertController) {
+    public alertCtrl: AlertController,
+    public menu: MenuController) {
 
       this.formGroup = this.formBuilder.group(
         {
@@ -39,7 +41,19 @@ export class SignupPage {
       )
   }
 
+  ionViewWillEnter() { //quando for entrar na página acesso o menu e o desabilito    
+    this.menu.swipeEnable(false);
+    console.log("desabilita menu")   
+  } 
+ 
+  ionViewDidLeave() {    //quando sair da página, volta com o menu 
+    this.menu.swipeEnable(true);   
+    console.log("habilita menu")
+  }
+
   ionViewDidLoad() {
+    this.menu.swipeEnable(true);   
+    console.log("habilita menu")
     console.log('ionViewDidLoad SignupPage');
   }
 
@@ -67,5 +81,9 @@ export class SignupPage {
       ] 
     });
     alert.present(); //apresenta o alert na tela
+  }
+
+  back(){
+    this.navCtrl.pop()
   }
 }
