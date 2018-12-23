@@ -2,6 +2,7 @@ import { CarroService } from './../../services/domain/carro.service';
 import { CarroDTO } from './../../models/carro.dto';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { API_CONFIG } from '../../config/api.config';
 
 /**
  * Generated class for the CarrosPage page.
@@ -30,12 +31,23 @@ export class CarrosPage {
     this.carroService.findByCategoria(categoria_id)
     .subscribe(response=>{
       this.items = response['content']
-      console.log(this.items)
+      this.loadImageUrls();
     }, error=>{})
   }
 
   Detalhes(){
     console.log("Clique")
   }
+
+  loadImageUrls() {
+    for (var i=0; i<this.items.length; i++) {
+      let item = this.items[i];
+      this.carroService.getImageFromBucket(item.id)
+        .subscribe(response => {
+          item.imageUrl = `${API_CONFIG.bucketBaseUrl}/car${item.id}.jpg`;
+        },
+        error => {});
+    }
+  }  
 
 }
