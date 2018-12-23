@@ -6,7 +6,7 @@
 -->
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar color="red">
     <ion-title>carros</ion-title>
   </ion-navbar>
 
@@ -14,5 +14,16 @@
 
 
 <ion-content padding>
-
+  <ion-card *ngFor="let item of items">
+    <img [src]="item.imageUrl || 'assets/imgs/monza.jpg'"/>
+    <ion-card-content>
+      <ion-card-title>
+        {{item.nome}}
+        </ion-card-title>
+      <p>
+        {{item.ano}}
+      </p>
+    </ion-card-content>
+    <button ion-button class="right-button" clear (click)="Detalhes()">Detalhes</button>
+  </ion-card>
 </ion-content>

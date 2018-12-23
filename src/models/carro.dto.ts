@@ -5,4 +5,5 @@ export interface CarroDTO {
     cor: number
     ano: number
     sedeId: number
+    imageUrl?: string
 }

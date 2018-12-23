@@ -34,4 +34,8 @@ export class CarrosPage {
     }, error=>{})
   }
 
+  Detalhes(){
+    console.log("Clique")
+  }
+
 }
