@@ -1,3 +1,4 @@
+import { CarroService } from './../services/domain/carro.service';
 import { ClienteService } from './../services/domain/cliente.service';
 import { StorageService } from './../services/storage.service';
 import { AuthService } from './../services/auth.service';
@@ -36,7 +37,8 @@ import { AuthInterceptorProvider } from '../interceptors/auth-interceptor';
     AuthService,
     StorageService,
     ClienteService,
-    AuthInterceptorProvider
+    AuthInterceptorProvider,
+    CarroService
   ]
 })
 export class AppModule {}

@@ -22,13 +22,20 @@ export class CategoriasPage {
 
   items: CategoriaDTO[] = []
 
-  constructor(private categoriaService: CategoriaService) {
+  constructor(
+    private categoriaService: CategoriaService,
+    private navCtrl: NavController,
+    public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
     this.categoriaService.findAll()
     .subscribe(response=> { this.items = response },
     error=>{  })
+  }
+
+  showCarros(id: string){
+    this.navCtrl.push('CarrosPage', {categoria_id: id})
   }
 
 }
