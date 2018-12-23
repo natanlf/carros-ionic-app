@@ -1,0 +1,39 @@
+<!--
+  Generated template for the CarroDetailPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="red">
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    <ion-title>Detalhes</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-card>
+      <img [src]="item?.imageUrl || 'assets/imgs/monza.jpg'"/>
+      <ion-card-content>
+        <ion-card-title>
+          {{item?.nome}}
+          </ion-card-title>
+        <p>
+          {{item?.placa}}
+        </p>
+        <p>{{item?.cor}}</p>
+        <p>{{item?.modelo.nome}}</p>
+        <p>{{item?.ano}}</p>
+        <p>{{item?.sede.endereco.cidade.nome}}</p>
+        <p>{{item?.sede.endereco.bairro}}</p>
+        <p>{{item?.sede.endereco.logradouro}} {{item?.sede.endereco.numero}}</p>
+        <p>{{item?.sede.endereco.complemento}}</p>
+      </ion-card-content>
+    </ion-card>
+      <button ion-button block outline>Alugar</button>
+</ion-content>

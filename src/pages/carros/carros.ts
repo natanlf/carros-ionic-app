@@ -35,8 +35,8 @@ export class CarrosPage {
     }, error=>{})
   }
 
-  Detalhes(){
-    console.log("Clique")
+  showDetails(id: string){
+    this.navCtrl.push('CarroDetailPage', {carro_id: id})
   }
 
   loadImageUrls() {
