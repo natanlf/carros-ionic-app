@@ -6,7 +6,7 @@
 -->
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar color="red">
     <ion-title>locacao</ion-title>
   </ion-navbar>
 
@@ -14,5 +14,29 @@
 
 
 <ion-content padding>
+  <form [formGroup]="formGroup" (ngSubmit)="saveLocacao(); $event.preventDefault()">
+    <ion-list radio-group formControlName="@type">
+      <ion-list-header>
+        Tipo de locação
+      </ion-list-header>
+      <ion-item>
+        <ion-label>Locação a longo período</ion-label>
+        <ion-radio checked="true" value="LocacaoLongoPeriodo"></ion-radio>
+      </ion-item>
+      <ion-item>
+        <ion-label>Locação diária</ion-label>
+        <ion-radio value="LocacaoDiaria"></ion-radio>
+      </ion-item>
+    </ion-list>
 
+    <ion-item *ngIf="formGroup.value['@type'] == 'LocacaoDiaria'">
+      <ion-label stacked>Dias Previstos</ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Data devolução</ion-label>
+      <ion-input formControlName="instanteDevolucao" type="date"></ion-input>
+    </ion-item>
+    <button ion-button block type="submit" [disabled]="formGroup.invalid">Próximo</button>
+  </form>
 </ion-content>

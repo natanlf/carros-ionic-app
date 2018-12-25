@@ -42,8 +42,8 @@ export class CarroDetailPage {
       error => {});
     }
 
-    locacao(){
-      this.navCtrl.push('LocacaoPage')
+    locacao(item: string){
+      this.navCtrl.push('LocacaoPage', {carro: item})
     }
 
 }
