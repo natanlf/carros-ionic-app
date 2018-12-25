@@ -42,4 +42,8 @@ export class CarroDetailPage {
       error => {});
     }
 
+    locacao(){
+      this.navCtrl.push('LocacaoPage')
+    }
+
 }

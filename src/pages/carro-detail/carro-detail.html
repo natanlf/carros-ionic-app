@@ -29,11 +29,10 @@
         <p>{{item?.cor}}</p>
         <p>{{item?.modelo.nome}}</p>
         <p>{{item?.ano}}</p>
-        <p>{{item?.sede.endereco.cidade.nome}}</p>
+        <p>{{item?.sede.endereco.cidade.estado.nome}}, {{item?.sede.endereco.cidade.nome}}</p>
         <p>{{item?.sede.endereco.bairro}}</p>
-        <p>{{item?.sede.endereco.logradouro}} {{item?.sede.endereco.numero}}</p>
-        <p>{{item?.sede.endereco.complemento}}</p>
+        <p>{{item?.sede.endereco.logradouro}}, {{item?.sede.endereco.numero}} {{item?.sede.endereco.complemento}}</p>
       </ion-card-content>
     </ion-card>
-      <button ion-button block outline>Alugar</button>
+      <button ion-button block outline (click)="locacao()">Alugar</button>
 </ion-content>
