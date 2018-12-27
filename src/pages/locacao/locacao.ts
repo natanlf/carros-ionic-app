@@ -21,6 +21,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 export class LocacaoPage {
   carro: any
   formGroup: FormGroup;
+  total: number = 0
 
   constructor(
     public navCtrl: NavController, 
@@ -33,7 +34,7 @@ export class LocacaoPage {
 
       this.formGroup = this.formBuilder.group({
         diasPrevistos: [1, Validators.required], //diaria
-        desconto: [0.10, Validators.required], //longo periodo
+        desconto: [0, Validators.required], //longo periodo
         instanteDevolucao: [null, Validators.required],
         "@type": ["LocacaoLongoPeriodo", Validators.required], //diaria oulongo periodo
         cliente: {id: 6},  //cliente id
@@ -54,7 +55,6 @@ export class LocacaoPage {
       this.clienteService.findByEmail(localUser.email)
       .subscribe(response=>{
         localStorage.setItem("clienteId", response.id.toString())
-        //console.log(this.cli);
       },error=>{
         if(error.status==403){ //testando redirect para erro 403
           this.navCtrl.setRoot('HomePage');
@@ -63,13 +63,51 @@ export class LocacaoPage {
         }
       })
     }
-    console.log(localStorage.getItem("clienteId"));
-    console.log(this.carro);
+
     this.formGroup.controls.cliente.setValue({id: parseInt(localStorage.getItem("clienteId"))});
-    console.log(JSON.stringify(this.formGroup.value));
   }
 
   saveLocacao(){
+    let values = this.formGroup.value
+    if(values['@type']==="LocacaoLongoPeriodo"){
+      let today = new Date()
+      let devolucao = this.formGroup.controls.instanteDevolucao.value
+      let dev = new Date(devolucao)
+      dev.setHours(dev.getHours()+3) //por causa da timezone adiciono 3 horas
+      console.log(dev)
+      console.log(today)
+      console.log(devolucao)
+
+      //Pego a diferença em dias 
+      let diff = Math.abs(dev.getTime() - today.getTime())
+      let diffDays = Math.ceil(diff/(1000 * 3600 * 24))
+      console.log(diffDays)
+
+      let precoDiaria = this.carro.categoria.valorDiario
+      let desconto = this.formGroup.controls.desconto.value
+      if(diffDays>7 && diffDays<14){
+        //10% de desconto
+        this.formGroup.controls.desconto.setValue(0.10);
+      }else if(diffDays>14){
+        //15% de desconto
+        this.formGroup.controls.desconto.setValue(0.15);
+      }else if(diffDays>21){
+        //20% de desconto
+        this.formGroup.controls.desconto.setValue(0.20);
+      }
+      this.total = (diffDays * precoDiaria) - (diffDays * precoDiaria * desconto)
+
+    }
+    console.log(this.formGroup.value)
+    console.log(values['@type'])
+    console.log(this.formGroup.controls.desconto.value)
+    /*this.locacaoService.insert(this.formGroup.value)
+    .subscribe(response=>{
+      this.showInsertOK()
+    },error=>{})*/
+  }
+
+  saveLocacaoDB(){
     this.locacaoService.insert(this.formGroup.value)
     .subscribe(response=>{
       this.showInsertOK()

@@ -40,4 +40,9 @@
     </ion-item>
     <button ion-button block type="submit" [disabled]="formGroup.invalid">Próximo</button>
   </form>
+  <hr>
+  <div *ngIf="total>0">
+    <h2>Total R${{total}}</h2>
+  </div>
+  <button *ngIf="total>0" ion-button block outline (click)="saveLocacaoDB()">Confirmar</button>
 </ion-content>
