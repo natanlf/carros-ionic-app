@@ -3,7 +3,7 @@ import { StorageService } from './../../services/storage.service';
 import { ClienteService } from './../../services/domain/cliente.service';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 
 /**
  * Generated class for the LocacaoPage page.
@@ -22,6 +22,7 @@ export class LocacaoPage {
   carro: any
   formGroup: FormGroup;
   total: number = 0
+  diffDays: number
 
   constructor(
     public navCtrl: NavController, 
@@ -69,42 +70,45 @@ export class LocacaoPage {
 
   saveLocacao(){
     let values = this.formGroup.value
-    if(values['@type']==="LocacaoLongoPeriodo"){
-      let today = new Date()
-      let devolucao = this.formGroup.controls.instanteDevolucao.value
-      let dev = new Date(devolucao)
-      dev.setHours(dev.getHours()+3) //por causa da timezone adiciono 3 horas
-      console.log(dev)
-      console.log(today)
-      console.log(devolucao)
+    this.diffDays = this.diasAluguel()
+    let precoDiaria: number = this.carro.categoria.valorDiario
 
-      //Pego a diferença em dias 
-      let diff = Math.abs(dev.getTime() - today.getTime())
-      let diffDays = Math.ceil(diff/(1000 * 3600 * 24))
-      console.log(diffDays)
-
-      let precoDiaria = this.carro.categoria.valorDiario
+    if(values['@type']==="LocacaoLongoPeriodo"){ 
       let desconto = this.formGroup.controls.desconto.value
-      if(diffDays>7 && diffDays<14){
+      if(this.diffDays>7 && this.diffDays<14){
         //10% de desconto
         this.formGroup.controls.desconto.setValue(0.10);
-      }else if(diffDays>14){
+      }else if(this.diffDays>14){
         //15% de desconto
         this.formGroup.controls.desconto.setValue(0.15);
-      }else if(diffDays>21){
+      }else if(this.diffDays>21){
         //20% de desconto
         this.formGroup.controls.desconto.setValue(0.20);
       }
-      this.total = (diffDays * precoDiaria) - (diffDays * precoDiaria * desconto)
+      this.total = (this.diffDays * precoDiaria) - (this.diffDays * precoDiaria * desconto)
 
+    }else{
+      if(this.formGroup.controls.diasPrevistos.value <= this.diffDays){
+        this.total = precoDiaria * this.diasAluguel()
+      }   
     }
     console.log(this.formGroup.value)
     console.log(values['@type'])
     console.log(this.formGroup.controls.desconto.value)
-    /*this.locacaoService.insert(this.formGroup.value)
-    .subscribe(response=>{
-      this.showInsertOK()
-    },error=>{})*/
+  
+  }
+
+  diasAluguel(): number{ //quantos dias o carro estará alugado
+    let today = new Date()
+    let devolucao = this.formGroup.controls.instanteDevolucao.value
+    let dev = new Date(devolucao)
+    dev.setHours(dev.getHours()+3) //por causa da timezone adiciono 3 horas
+
+    //Pego a diferença em dias 
+    let diff = Math.abs(dev.getTime() - today.getTime())
+    let diffDays = Math.ceil(diff/(1000 * 3600 * 24))
+    console.log(diffDays)
+    return diffDays
   }
 
   saveLocacaoDB(){

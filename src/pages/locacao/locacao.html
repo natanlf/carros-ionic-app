@@ -41,8 +41,17 @@
     <button ion-button block type="submit" [disabled]="formGroup.invalid">Próximo</button>
   </form>
   <hr>
+  <div *ngIf="formGroup.value['@type'] == 'LocacaoDiaria' && formGroup.value['diasPrevistos'] > diffDays">
+      <p class="danger">*Os dias previstos são maiores que a data de devolução</p>
+  </div>
   <div *ngIf="total>0">
     <h2>Total R${{total}}</h2>
+  </div>
+  <div *ngIf="formGroup.value['@type'] == 'LocacaoDiaria'">
+    <p>O cálculo será baseado nos dias alugados * diária, podendo devolver antes da data de devolução</p>
+  </div>
+  <div *ngIf="formGroup.value['@type'] == 'LocacaoLongoPeriodo'">
+    <p>O cálculo será baseado nos dias alugados * diária com desconto por ser longo período</p>
   </div>
   <button *ngIf="total>0" ion-button block outline (click)="saveLocacaoDB()">Confirmar</button>
 </ion-content>
