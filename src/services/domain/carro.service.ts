@@ -8,8 +8,8 @@ import { Injectable } from '@angular/core';
 export class CarroService {
     constructor(private http: HttpClient){}
 
-    findByCategoria(categoria_id: string){
-        return this.http.get(`${API_CONFIG.baseUrl}/carros/?categoria=${categoria_id}`)
+    findByCategoria(categoria_id: string, page: number, linesPerPage: number = 24){
+        return this.http.get(`${API_CONFIG.baseUrl}/carros/?categoria=${categoria_id}&page=${page}&linesPerPage=${linesPerPage}`)
     }
 
     getImageFromBucket(id : string) : Observable<any> {

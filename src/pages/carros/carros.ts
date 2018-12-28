@@ -19,7 +19,8 @@ import { LoadingController } from 'ionic-angular/components/loading/loading-cont
 })
 export class CarrosPage {
 
-  items: CarroDTO[]
+  items: CarroDTO[] = []
+  page: number = 0
 
   constructor(
     public navCtrl: NavController, 
@@ -35,11 +36,15 @@ export class CarrosPage {
   loadData(){
     let categoria_id = this.navParams.get('categoria_id')
     let loader = this.presentLoading(); //chamo o loader
-    this.carroService.findByCategoria(categoria_id)
+    this.carroService.findByCategoria(categoria_id, this.page, 5)
     .subscribe(response=>{
-      this.items = response['content']
+      let start = this.items.length
+      this.items = this.items.concat(response['content'])
+      let end = this.items.length
       loader.dismiss()
-      this.loadImageUrls();
+      console.log(this.page);
+      console.log(this.items);
+      this.loadImageUrls(start, end);
     }, error=>{
       loader.dismiss()
     })
@@ -49,8 +54,8 @@ export class CarrosPage {
     this.navCtrl.push('CarroDetailPage', {carro_id: id})
   }
 
-  loadImageUrls() {
-    for (var i=0; i<this.items.length; i++) {
+  loadImageUrls(start: number, end: number) {
+    for (var i=start; i<end; i++) {
       let item = this.items[i];
       this.carroService.getImageFromBucket(item.id)
         .subscribe(response => {
@@ -69,9 +74,21 @@ export class CarrosPage {
   }
 
   doRefresh(refresher) {
+    this.page = 0;
+    this.items = [];
     this.loadData();
     setTimeout(() => {
       refresher.complete();
+    }, 1000);
+  }
+
+  doInfinite(infiniteScroll) {
+    //toda vez que esse método for chamado significa que queremos buscar mais dados
+    //incrementamos a página e pegamos mais dados chamando o loadData
+    this.page++;
+    this.loadData();
+    setTimeout(() => {
+      infiniteScroll.complete();
     }, 1000);
   }
 

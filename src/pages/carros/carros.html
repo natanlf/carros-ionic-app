@@ -29,4 +29,8 @@
     </ion-card-content>
     <button ion-button class="right-button" clear (click)="showDetails(item.id)">Detalhes</button>
   </ion-card>
+
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>  
 </ion-content>
