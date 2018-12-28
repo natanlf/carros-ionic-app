@@ -72,19 +72,21 @@ export class LocacaoPage {
     let values = this.formGroup.value
     this.diffDays = this.diasAluguel()
     let precoDiaria: number = this.carro.categoria.valorDiario
-
+    this.formGroup.controls.diasPrevistos.setValue(this.diffDays)
+    console.log('Dias previstos' + this.formGroup.controls.diasPrevistos.value)
     if(values['@type']==="LocacaoLongoPeriodo"){ 
-      let desconto = this.formGroup.controls.desconto.value
+      
       if(this.diffDays>7 && this.diffDays<14){
         //10% de desconto
         this.formGroup.controls.desconto.setValue(0.10);
-      }else if(this.diffDays>14){
+      }else if(this.diffDays>=14 && this.diffDays<21){
         //15% de desconto
         this.formGroup.controls.desconto.setValue(0.15);
-      }else if(this.diffDays>21){
+      }else if(this.diffDays>=21){
         //20% de desconto
         this.formGroup.controls.desconto.setValue(0.20);
       }
+      let desconto = this.formGroup.controls.desconto.value
       this.total = (this.diffDays * precoDiaria) - (this.diffDays * precoDiaria * desconto)
 
     }else{
@@ -92,9 +94,6 @@ export class LocacaoPage {
         this.total = precoDiaria * this.diasAluguel()
       }   
     }
-    console.log(this.formGroup.value)
-    console.log(values['@type'])
-    console.log(this.formGroup.controls.desconto.value)
   
   }
 

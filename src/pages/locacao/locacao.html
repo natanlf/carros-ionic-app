@@ -29,29 +29,39 @@
       </ion-item>
     </ion-list>
 
-    <ion-item *ngIf="formGroup.value['@type'] == 'LocacaoDiaria'">
+    <!--<ion-item *ngIf="formGroup.value['@type'] == 'LocacaoDiaria'">
       <ion-label stacked>Dias Previstos</ion-label>
       <ion-input formControlName="diasPrevistos" type="text"></ion-input>
-    </ion-item>
+    </ion-item>-->
 
     <ion-item>
       <ion-label stacked>Data devolução</ion-label>
       <ion-input formControlName="instanteDevolucao" type="date"></ion-input>
     </ion-item>
-    <button ion-button block type="submit" [disabled]="formGroup.invalid">Próximo</button>
+    <button ion-button block type="submit" [disabled]="formGroup.invalid">Calcular</button>
   </form>
   <hr>
   <div *ngIf="formGroup.value['@type'] == 'LocacaoDiaria' && formGroup.value['diasPrevistos'] > diffDays">
       <p class="danger">*Os dias previstos são maiores que a data de devolução</p>
   </div>
-  <div *ngIf="total>0">
+  <div *ngIf="diffDays > 30">
+    <h3 class="danger">Não é permitido aluguel para mais de 30 dias</h3>
+  </div>
+  <div *ngIf="total>0 && diffDays < 31">
+    <br>
+    <p>Dias de Aluguel: {{diffDays}}</p>
+    <p>Diária: R${{carro.categoria.valorDiario}}</p>
+    <div *ngIf="formGroup.value['@type'] == 'LocacaoLongoPeriodo'">
+      <p>Desconto: {{formGroup.value['desconto']}}</p>
+    </div>
     <h2>Total R${{total}}</h2>
+    <div *ngIf="formGroup.value['@type'] == 'LocacaoDiaria'">
+        <p>O cálculo será baseado nos dias alugados * diária, podendo devolver antes da data de devolução sendo cobrado apenas os dias com o veículo</p>
+      </div>
+      <div *ngIf="formGroup.value['@type'] == 'LocacaoLongoPeriodo'">
+        <p>O cálculo será baseado nos dias alugados * diária com desconto por ser longo período</p>
+      </div>
+      <button *ngIf="total>0" ion-button block outline (click)="saveLocacaoDB()">Confirmar</button>
   </div>
-  <div *ngIf="formGroup.value['@type'] == 'LocacaoDiaria'">
-    <p>O cálculo será baseado nos dias alugados * diária, podendo devolver antes da data de devolução</p>
-  </div>
-  <div *ngIf="formGroup.value['@type'] == 'LocacaoLongoPeriodo'">
-    <p>O cálculo será baseado nos dias alugados * diária com desconto por ser longo período</p>
-  </div>
-  <button *ngIf="total>0" ion-button block outline (click)="saveLocacaoDB()">Confirmar</button>
+
 </ion-content>
