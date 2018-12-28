@@ -3,6 +3,7 @@ import { CarroDTO } from './../../models/carro.dto';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { API_CONFIG } from '../../config/api.config';
+import { LoadingController } from 'ionic-angular/components/loading/loading-controller';
 
 /**
  * Generated class for the CarrosPage page.
@@ -23,16 +24,21 @@ export class CarrosPage {
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
-    private carroService: CarroService) {
+    private carroService: CarroService,
+    public loadingCtrl: LoadingController) {
   }
 
   ionViewDidLoad() {
     let categoria_id = this.navParams.get('categoria_id')
+    let loader = this.presentLoading(); //chamo o loader
     this.carroService.findByCategoria(categoria_id)
     .subscribe(response=>{
       this.items = response['content']
+      loader.dismiss()
       this.loadImageUrls();
-    }, error=>{})
+    }, error=>{
+      loader.dismiss()
+    })
   }
 
   showDetails(id: string){
@@ -49,5 +55,13 @@ export class CarrosPage {
         error => {});
     }
   }  
+
+  presentLoading() {
+    let loader = this.loadingCtrl.create({
+      content: "Aguarde..."
+    });
+    loader.present();
+    return loader;
+  }
 
 }
