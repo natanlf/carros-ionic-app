@@ -52,7 +52,7 @@
     <p>Dias de Aluguel: {{diffDays}}</p>
     <p>Diária: R${{carro.categoria.valorDiario}}</p>
     <div *ngIf="formGroup.value['@type'] == 'LocacaoLongoPeriodo'">
-      <p>Desconto: {{formGroup.value['desconto']}}</p>
+      <p>Desconto: {{formGroup.value['desconto'] | percent}}</p>
     </div>
     <h2>Total R${{total}}</h2>
     <div *ngIf="formGroup.value['@type'] == 'LocacaoDiaria'">
