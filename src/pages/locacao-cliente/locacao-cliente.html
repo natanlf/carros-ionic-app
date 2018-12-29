@@ -6,13 +6,37 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>locacao-cliente</ion-title>
-  </ion-navbar>
-
-</ion-header>
+    <ion-navbar color="red">
+        <button ion-button menuToggle>
+          <ion-icon name="menu"></ion-icon>
+        </button>
+      <ion-title>Locações</ion-title>
+    </ion-navbar>
+  
+  </ion-header>
 
 
 <ion-content padding>
-
+  <ion-card *ngFor="let item of items">
+    <ion-card-content>
+      <ion-card-title>
+        {{item.carro.nome}}
+      </ion-card-title>
+      <b>{{item.carro.modelo.nome}}</b>
+      <p>{{item.carro.ano}}</p>
+      <p>{{item.carro.placa}}</p>
+      <p>{{item.carro.cor}}</p>
+      <hr>
+      <b>Datas</b>
+      <p>Locação: {{item.instanteLocacao | date:'dd/MM/yyyy'}}</p>
+      <p>Devolução: {{item.instanteDevolucao | date:'dd/MM/yyyy'}}</p>
+      <hr>
+      <b>Endereço</b>
+      <p>{{item.sede.endereco.cidade.estado.nome}}, {{item.sede.endereco.cidade.nome}}</p>
+      <p>{{item.sede.endereco.cep}}</p>
+      <p>{{item.sede.endereco.bairro}}</p>
+      <p>{{item.sede.endereco.logradouro}}, {{item.sede.endereco.numero}}</p>     
+      <p>{{item.sede.endereco.complemento}}</p>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
