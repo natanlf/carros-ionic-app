@@ -16,4 +16,8 @@ export class LocacaoService {
             responseType: 'text' //corpo vazio por isso texto para não dá erro de parse json
         })
     }
+
+    findByCliente(page: number, linesPerPage: number = 24){
+        return this.http.get(`${API_CONFIG.baseUrl}/locacoes/?page=${page}&linesPerPage=${linesPerPage}`)
+    }
 }
