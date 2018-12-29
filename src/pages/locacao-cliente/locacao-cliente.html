@@ -18,6 +18,7 @@
 
 <ion-content padding>
   <ion-card *ngFor="let item of items">
+      <img [src]="item.imageUrl || 'assets/imgs/monza.jpg'"/>
     <ion-card-content>
       <ion-card-title>
         {{item.carro.nome}}
