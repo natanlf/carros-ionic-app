@@ -13,7 +13,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         public alertCtrl: AlertController){}
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-       console.log("Passou no interceptor");
+
        return next.handle(req)
        .catch((error, caught) => {
             let errorObj = error;
@@ -23,8 +23,6 @@ export class ErrorInterceptor implements HttpInterceptor {
            if (!errorObj.status) { //se o erro não tiver status, não é json, nesse caso do um parse para json
                errorObj = JSON.parse(errorObj);
            }
-            console.log("Erro detectado pelo interceptor:"); //interceptor retorna o erro na tela agora e não mais o controlador
-           console.log(errorObj);
 
            switch(errorObj.status){
                case 401:

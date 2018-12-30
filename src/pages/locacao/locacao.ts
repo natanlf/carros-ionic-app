@@ -4,6 +4,7 @@ import { ClienteService } from './../../services/domain/cliente.service';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
+import { LoadingController } from 'ionic-angular/components/loading/loading-controller';
 
 /**
  * Generated class for the LocacaoPage page.
@@ -31,7 +32,8 @@ export class LocacaoPage {
     private clienteService: ClienteService,
     private storage: StorageService,
     private locacaoService: LocacaoService,
-    private alertCtrl: AlertController) {
+    private alertCtrl: AlertController,
+    public loadingCtrl: LoadingController) {
 
       this.formGroup = this.formBuilder.group({
         diasPrevistos: [1, Validators.required], //diaria
@@ -73,7 +75,7 @@ export class LocacaoPage {
     this.diffDays = this.diasAluguel()
     let precoDiaria: number = this.carro.categoria.valorDiario
     this.formGroup.controls.diasPrevistos.setValue(this.diffDays)
-    console.log('Dias previstos' + this.formGroup.controls.diasPrevistos.value)
+
     if(values['@type']==="LocacaoLongoPeriodo"){ 
       
       if(this.diffDays>7 && this.diffDays<14){
@@ -106,15 +108,18 @@ export class LocacaoPage {
     //Pego a diferença em dias 
     let diff = Math.abs(dev.getTime() - today.getTime())
     let diffDays = Math.ceil(diff/(1000 * 3600 * 24))
-    console.log(diffDays)
     return diffDays
   }
 
   saveLocacaoDB(){
+    let loader = this.presentLoading(); //chamo o loader
     this.locacaoService.insert(this.formGroup.value)
     .subscribe(response=>{
+      loader.dismiss()
       this.showInsertOK()
-    },error=>{})
+    },error=>{
+      loader.dismiss()
+    })
   }
 
   showInsertOK(){
@@ -132,6 +137,14 @@ export class LocacaoPage {
       ] 
     });
     alert.present(); //apresenta o alert na tela
+  }
+
+  presentLoading() {
+    let loader = this.loadingCtrl.create({
+      content: "Aguarde..."
+    });
+    loader.present();
+    return loader;
   }
 
 }
