@@ -13,19 +13,8 @@ Ao longo do desenvolvimento tive que colocar senha e perfil para o cliente, assi
 O cliente pode alugar um carro e ao alugar o sistema envia um e-mail de confirmação.
 
 O app android foi feito usando a ferramenta Ionic que é um framework para desenvolvimento de aplicativos que utiliza o Javascript, Typescript, pois usa o framework Angular que atualmente é mantido pela grande empresa Google.
-Então vamos ver o app funcionando:
 
-[Vídeo demonstrativo](https://www.youtube.com/watch?v=v-fXGdTJF_o)
-
-No vídeo acima, criei uma conta, fiz uma locação e coloquei uma foto em meu perfil.
-
-Podemos perceber que antes de carregar as imagens dos carros, aparece um Monza novo vermelho, isso acontece porque enquanto o aplicativo não carrega as imagens do S3 da Amazon ele mostra uma imagem como padrão, que é a do Monza.
-
-Outra coisa que podemos perceber é que ao alugar o carro, demora alguns segundos, pois há um envio de e-mail de confirmação de locação:
-
-![Email](/assets/email-app.png)
-
-## A seguir seguem algumas screenshots do app:
+## A seguir seguem algumas screenshots:
 
 
 ![Login](/assets/login.png)
@@ -40,9 +29,11 @@ Outra coisa que podemos perceber é que ao alugar o carro, demora alguns segundo
 
 ![Perfil](/assets/perfil.png)
 
+![Email](/assets/email-app.png)
+
 
 Aprendi bastante fazendo esse aplicativo mas não está disponível na web por causa dos gastos que eu teria com o servidor.
-Abaixo está o link do projeto Back end que está no GitHub:
+Abaixo está o link do projeto Back end:
 
 https://github.com/natanlf/carros-spring-boot-backend
 
